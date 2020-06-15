@@ -18,7 +18,7 @@ par.channel.Dh = 4*par.channel.Ac/par.channel.P;
 par.accu.ncells = 420;
 par.accu.nlayers = 5;
 
-% Air properties at 310 K, 101325 Pa
+%% Air properties at 310 K, 101325 Pa
 par.air.rho = 1.141;   % Density
 par.air.T = 310;       % Temperature
 par.air.k = 0.0274;    % Thermal conductivity
@@ -26,4 +26,8 @@ par.air.cp = 1005;     % Specific heat @ constant pressure
 par.air.mu = 18.87e-6; % Dynamic viscosity
 par.air.nu = 16.54e-6; % Kinematic viscosity
 par.air.Pr = .69;      % Prandtl number
+
+%% Fan
+par.fan.a = 1;
+
 
