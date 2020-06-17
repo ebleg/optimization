@@ -1,21 +1,18 @@
 %% ENGINEERING OPTIMIZATION PROJECT
 
 close all; clear; clc;
-set(groot, 'defaultAxesTickLabelInterpreter','latex'); set(groot, 'defaultLegendInterpreter','latex');
 
 run params
+run defaultPlotSettings
 
 AR = 1;
 nlayers = 5; 
+
 t = 0.005;
+u = 0.5;
 
 [nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
-% plotBattery(t, nlayers, AR, par)
 
-%%
-
-t = 0.001;
-u = 0.1;
 
 Tcells = ones(stack.x, stack.y, stack.z)*par.cell.T0;
 
@@ -40,9 +37,6 @@ end
 
 %%
 plotCellTemperatures(t, nlayers, AR, Tcells, par);
-
-figure
-histogram(Tcells)
 
 
 

@@ -8,8 +8,6 @@ function [] = plotCellTemperatures(t, nlayers, AR, Tcells, par)
     P = unique(P,'rows');
     
     figure;
-    grid on;
-    hold on;
     
     % Spacing between cells
     dx = 2*par.cell.r + t;
@@ -25,28 +23,40 @@ function [] = plotCellTemperatures(t, nlayers, AR, Tcells, par)
     Tmax = max(Tcells, [], 'all');
     Tcolor = @(T) cmap(ceil((T - Tmin)/(Tmax - Tmin)*255 + 1), :);
     
+
+    tl = tiledlayout(1, 2);
+    nexttile; hold on;
+    
     % Plot all the cylinders
     for i = 0:(stack.x - 1)
         for j = 0:(stack.y - 1)
             for k = 0:(nlayers-1)               
                 shp = alphaShape(P(:,1) + i*dx,P(:,2) + j*dy,P(:,3) + k*dz,1);
-                plot(shp, 'FaceColor', Tcolor(Tcells(i+1, j+1, k+1)));
+                plot(shp, 'FaceColor', Tcolor(Tcells(i+1, j+1, k+1)), 'EdgeAlpha', 0.2, 'FaceLighting', 'gouraud', 'EdgeLighting', 'gouraud');
             end
         end
     end  
     
-    title('\textbf{Cell temperature}', 'Interpreter', 'latex');
-    xlabel('$x$ [m]', 'Interpreter', 'latex');
-    ylabel('$y$ [m]', 'Interpreter', 'latex');
-    zlabel('$z$ [m]', 'Interpreter', 'latex');
+    xlabel('$x$ [m]');
+    ylabel('$y$ [m]');
+    zlabel('$z$ [m]');
     
     str = sprintf('Dimensions [mm]\n  $x$: %.0f\n  $y$: %.0f\n  $z$: %.0f', size.x*1e3, size.y*1e3, size.z*1e3);
-    dim = [.7 .5 .3 .3];
+    dim = [.4 .5 .3 .3];
     annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'latex');
     
     axis equal;
-    colorbar('west', 'Ticks', linspace(0, 1, 10), 'TickLabels', round(linspace(0, 1, 10)*(Tmax - Tmin) + Tmin))    
-    view(45, 45)
+    cb = colorbar('west', 'Ticks', linspace(0, 1, 10), 'TickLabels', round(linspace(0, 1, 10)*(Tmax - Tmin) + Tmin));    
+    cb.TickLabelInterpreter = 'latex';
+    view(45, 45);
     
+    nexttile;
+    histogram(Tcells);
+    xlabel('Temperature [K]');
+    ylabel('Number of cells [-]');
+    
+    title(tl, '\textbf{Cell temperature}', 'Interpreter', 'latex');
+
+
 end
 
