@@ -1,4 +1,4 @@
-function [] = plotBattery(t, nlayers, AR, par)
+function [] = plotCellTemperatures(t, nlayers, AR, Tcells, par)
     % Cell coordinates
     [x1,y1,z1] = cylinder(par.cell.r);
     x1 = x1(:) + par.cell.r; 
@@ -6,6 +6,8 @@ function [] = plotBattery(t, nlayers, AR, par)
     z1 = z1(:)*par.cell.l;
     P = [x1 y1 z1];
     P = unique(P,'rows');
+    
+    figure;
     grid on;
     hold on;
     
@@ -17,17 +19,23 @@ function [] = plotBattery(t, nlayers, AR, par)
     % Compute layout
     [~, stack, size] = batteryLayout(t, nlayers, AR, par);
     
+    % Colormap values
+    cmap = colormap;
+    Tmin = min(Tcells, [], 'all');
+    Tmax = max(Tcells, [], 'all');
+    Tcolor = @(T) cmap(ceil((T - Tmin)/(Tmax - Tmin)*255 + 1), :);
+    
     % Plot all the cylinders
     for i = 0:(stack.x - 1)
         for j = 0:(stack.y - 1)
-            for k = 0:(nlayers-1)
+            for k = 0:(nlayers-1)               
                 shp = alphaShape(P(:,1) + i*dx,P(:,2) + j*dy,P(:,3) + k*dz,1);
-                plot(shp);
+                plot(shp, 'FaceColor', Tcolor(Tcells(i+1, j+1, k+1)));
             end
         end
     end  
     
-    title('\textbf{Battery stacking configuration}', 'Interpreter', 'latex');
+    title('\textbf{Cell temperature}', 'Interpreter', 'latex');
     xlabel('$x$ [m]', 'Interpreter', 'latex');
     ylabel('$y$ [m]', 'Interpreter', 'latex');
     zlabel('$z$ [m]', 'Interpreter', 'latex');
@@ -37,6 +45,8 @@ function [] = plotBattery(t, nlayers, AR, par)
     annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'latex');
     
     axis equal;
+    colorbar('west', 'Ticks', linspace(0, 1, 10), 'TickLabels', round(linspace(0, 1, 10)*(Tmax - Tmin) + Tmin))    
     view(45, 45)
+    
 end
 
