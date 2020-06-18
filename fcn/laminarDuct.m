@@ -15,8 +15,6 @@ function [q, Tb] = laminarDuct(t, Ts, Te, L, u, par)
     % Exponents from Table 4.6 in Basic Heat and Mass Transfer
     Nu = variablePropertyCorrection(Nub, par.correction.lam.n, Te, Ts); 
     
-    %% TODO - ENTRANCE EFFECTS!!
-    
     % Average heat transfer because of Nusselt number
     h_avg = (par.air.k/Dh)*Nu;
     
