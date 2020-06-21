@@ -35,3 +35,8 @@ par.correction.turb.n = -0.55;
 %% Conduction coefficients
 par.cond.k_vert = 0.1;
 par.cond.k_hor = 0.1;
+
+%% Size constraints
+par.constraints.xwidth = 0.5;
+par.constraints.ywidth = 0.3;
+par.constraints.z = 0.4;

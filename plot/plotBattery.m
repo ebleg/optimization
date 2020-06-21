@@ -22,7 +22,7 @@ function [] = plotBattery(t, nlayers, AR, par)
         for j = 0:(stack.y - 1)
             for k = 0:(nlayers-1)
                 shp = alphaShape(P(:,1) + i*dx,P(:,2) + j*dy,P(:,3) + k*dz,1);
-                plot(shp);
+                plot(shp, 'EdgeAlpha', 0.2, 'FaceLighting', 'gouraud', 'EdgeLighting', 'gouraud');
             end
         end
     end  
