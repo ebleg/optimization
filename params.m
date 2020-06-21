@@ -23,7 +23,11 @@ par.air.nu = 15.66e-6;          % Kinematic viscosity
 par.air.Pr = .69;               % Prandtl number
 
 %% Fan
-par.fan.a = 0.1;
+% Based on fan used in NunaX: Noctua NF-A14 PWM, 140mm
+par.fan.u1 = 0.039;         % Volumetric flow [m3/s]
+par.fan.p1 = 1.56;          % Power [W]
+par.fan.omega1 = 1500;      % RPM
+par.fan.D1 = 0.14;          % Diameter fan [m]
 
 %% Variable property correction exponents
 par.correction.lam.m = 1;
