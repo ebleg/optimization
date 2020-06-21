@@ -8,13 +8,14 @@ run defaultPlotSettings
 AR = 1;
 nlayers = 5; 
 
-t = 0.005;
+t = 0.001;
 u = 0.5;
 
 [nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
 
 
 Tcells = ones(stack.x, stack.y, stack.z)*par.cell.T0;
+plotBattery(t, nlayers, AR, par);
 
 channels = struct();
 channels.T = ones(stack.x-1, stack.y-1, stack.z)*par.air.T;  % outlet temperature
