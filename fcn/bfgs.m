@@ -1,39 +1,31 @@
-function [xopt] = bfgs(fcn, x0, H0)
+function [xopt] = bfgs(fcn, x0)
     % Initial guess for B
-    B = inv(H0);
+    N = numel(x0);
+    B = eye(N);
     
     if size(x0, 2) ~= 1
         x0 = x0';
     end
     
-    I = eye(size(x0, 2));
-    
-    g0 = findif(fcn, x0);
+    f0 = fcn(x0);
+    g0 = findif(fcn, x0, f0);
     
     % Convergence criterion
     eps = 1e-5;
     i = 0; converged = false;
-    
-    scatter(x0(1), x0(2));
-    
-    oldphi = fcn(x0) + 0.5*norm(g0);
-    
+        
     % Obtain search direction
     while ~converged && (i <= 200)
         p = -B*(g0);
-
-        [a, oldphi] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, oldphi);
-        x1 = x0 + a*p;
-        g1 = findif(fcn, x1);
-
-        scatter(x1(1), x1(2));
         
+        [a, f1] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, f0, p'*g0);
+        x1 = x0 + a*p;
+        
+        g1 = findif(fcn, x1, f1);
+      
         s = x1 - x0;
         y = g1 - g0;
         
-%         rho = 1/(y'*s);
-%         B = (I - rho*(s*y'))*B*(I - rho*(y*s')) + rho*(s*s');
-
         B = B + ((s'*y + y'*B*y)*(s*s'))/(s'*y)^2 - (B*y*s' + s*y'*B)/(s'*y);
                 
         if norm(g1) < eps
@@ -41,8 +33,9 @@ function [xopt] = bfgs(fcn, x0, H0)
         end
         
         x0 = x1;
+        f0 = f1;
         g0 = g1;
-        i = i + 1; 
+        i = i + 1;
     end
     xopt = x1;
 end

@@ -1,20 +1,25 @@
-function [astar, phi_astar] = lineSearch2(fnc, amax, oldphi)
+function [astar, phi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_at0)
     a0 = 0; 
     meta = struct();
     meta.phi = fnc;
-    meta.phi_deriv = @(a) findif(meta.phi, a);
+    meta.phi_deriv = @(a, phival) findif(meta.phi, a, phival);
     meta.C1 = 1e-4;
     meta.C2 = 0.9;
-    meta.phi_at0 = meta.phi(0);
-    meta.dphi_at0 = meta.phi_deriv(0);
+    meta.phi_at0 = phi_at0;
+    meta.dphi_at0 = dphi_at0;
+%     meta.dphi_at0 = meta.phi_deriv(0, meta.phi_at0);
     
     phi0 = meta.phi_at0;
     dphi0 = meta.dphi_at0;      
     
     a1 = 1;
     
-    dphi1 = meta.phi_deriv(a1);
+    if (a1 < 0)
+        error('negative value')
+    end
+    
     phi1 = meta.phi(a1);
+    dphi1 = meta.phi_deriv(a1, phi1);
 
     max_iter = 10;
     
@@ -44,7 +49,7 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, oldphi)
         phi0 = phi1;
         dphi0 = dphi1;
         phi1 = meta.phi(a1);
-        dphi1 = meta.phi_deriv(phi1);
+        dphi1 = meta.phi_deriv(phi1, phi1);
                 
     end
     
@@ -59,7 +64,7 @@ function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, 
     for j = 1:max_iter
         anew = cubicintp(alow, philow, dphilow, ahigh, phihigh, dphihigh);
         phinew = meta.phi(anew);
-        dphinew = meta.phi_deriv(anew);
+        dphinew = meta.phi_deriv(anew, phinew);
 
         if (phinew > (meta.phi_at0 + meta.C1*anew*meta.dphi_at0)) || (phinew >= philow)
             ahigh = anew;
@@ -83,7 +88,8 @@ function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, 
         
         if j == max_iter
             astar = 1;
-            phi_astar = 0;
+            phi_astar = meta.phi(astar);
+%             warning('Maximum iterations reached')
         end
     end
 end
