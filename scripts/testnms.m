@@ -3,7 +3,7 @@ clear all; close all; clc;
 
 % Rosenbrock's function
 fun = @(x) 100*(x(2) - x(1)^2)^2 + (1 - x(1))^2;
-x0 = [-2.9723 0.1679];
+x0 = [3 4];
 
 %% Benchmark: minimize Rosenbrock's function using fminsearch
 % fminsearch uses the Nelder-Mead Simplex algorithm
@@ -30,6 +30,7 @@ x0 = [-2.9723 0.1679];
 % 	color = [1 0 0]';
 
 [xopt] = nms(fun,x0);
+
 
 
 

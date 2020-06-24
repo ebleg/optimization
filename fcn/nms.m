@@ -1,5 +1,6 @@
 function [xopt] = nms(fcn,x0)
 
+tic;
 % Initial simplex
 dim = length(x0);                  % Number of design variables
 step = 1;                          % Steplength between other vertices of initial simplex and vertex x0
@@ -90,4 +91,5 @@ end
 xopt = x(:,1);
 score_opt = scores(1);
 
+toc;
 end
