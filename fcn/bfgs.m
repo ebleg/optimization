@@ -21,11 +21,14 @@ function [xopt] = bfgs(fcn, x0)
         [a, f1] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, f0, p'*g0);
         x1 = x0 + a*p;
         
+        % Gradient at new point (f1 already calculated in line search)
         g1 = findif(fcn, x1, f1);
       
+        % Vectors for hessian update
         s = x1 - x0;
         y = g1 - g0;
         
+        % Hessian update
         B = B + ((s'*y + y'*B*y)*(s*s'))/(s'*y)^2 - (B*y*s' + s*y'*B)/(s'*y);
                 
         if norm(g1) < eps

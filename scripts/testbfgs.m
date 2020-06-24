@@ -1,6 +1,4 @@
-clear; close all;
-
-f = @(x) (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
+clear; close all; clc;
 
 [X, Y] = meshgrid(-5:0.1:5, -5:0.1:5);
 Z = nan(size(X));
@@ -12,7 +10,7 @@ Z = nan(size(X));
 % contour(X, Y, Z, linspace(0, 1000, 30));
 
 x0 = [-2.1 2.7];
-xopt = bfgs(f, x0);
+xopt = bfgs(@rosen, x0);
 
 % scatter(xopt(1), xopt(2), 'filled');
 
@@ -33,3 +31,8 @@ function stop = outfun(x, optimValues, state)
     x0 = x;
     drawnow
 end 
+
+function y = rosen(x)
+    disp(x)
+    y = (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
+end
