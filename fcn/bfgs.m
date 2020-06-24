@@ -18,11 +18,11 @@ function [xopt] = bfgs(fcn, x0)
     while ~converged && (i <= 200)
         p = -B*(g0);
         
-        [a, f1] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, f0, p'*g0);
+        [a, f1, df1] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, f0, p'*g0);
         x1 = x0 + a*p;
         
         % Gradient at new point (f1 already calculated in line search)
-        g1 = findif(fcn, x1, f1);
+        g1 = findif(fcn, x1, f1, p, df1);
       
         % Vectors for hessian update
         s = x1 - x0;

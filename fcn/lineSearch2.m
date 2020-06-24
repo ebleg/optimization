@@ -1,4 +1,4 @@
-function [astar, phi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_at0)
+function [astar, phi_astar, dphi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_at0)
     a0 = 0; 
     
     % Struct with constant values to reduce function parameters of zoom
@@ -33,19 +33,20 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_at0)
         % First Wolfe condition
         if (phi1 > (meta.phi_at0 + meta.C1*a1*meta.dphi_at0)) || ...
                 ((phi1 >= phi0) && i > 1)
-            [astar, phi_astar] = zoom(meta, a0, phi0, dphi0, a1, phi1, dphi1); break;
+            [astar, phi_astar, dphi_astar] = zoom(meta, a0, phi0, dphi0, a1, phi1, dphi1); break;
         end
         
         % Second Wolfe condition
         if (abs(dphi1) <= -meta.C2*meta.dphi_at0)
            astar = a1; 
            phi_astar = phi1;
+           dphi_astar = dphi1;
            break; 
         end
         
         % Third condition
         if (dphi1 >= 0)
-           [astar, phi_astar] = zoom(meta, a1, phi1, dphi1, a0, phi0, dphi0);
+           [astar, phi_astar, dphi_astar] = zoom(meta, a1, phi1, dphi1, a0, phi0, dphi0);
            break;
         end
         
@@ -65,7 +66,7 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_at0)
     end
 end
 
-function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, dphihigh)
+function [astar, phi_astar, dphi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, dphihigh)
     % Progressively reduce interval size if necessary
     max_iter = 10;
     for j = 1:max_iter
@@ -81,6 +82,7 @@ function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, 
             if abs(dphinew) <= -meta.C2*meta.dphi_at0
                astar = anew;
                phi_astar = phinew;
+               dphi_astar = dphinew;
                break;
             end
             if (dphinew*(ahigh - alow)) >= 0
@@ -95,7 +97,8 @@ function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, 
         
         if j == max_iter
             astar = 1;
-            phi_astar = meta.phi(astar);
+            phi_astar = meta.phi(astar);  % Inefficient, but almost never happens
+            dphi_astar = meta.phi_deriv(astar, phi_astar);
 %             warning('Maximum iterations reached')
         end
     end

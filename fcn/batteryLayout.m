@@ -1,4 +1,4 @@
-function [nch, stack, dim] = batteryLayout(t, nlayers, AR, par)
+function [nch, stack, dim] = batteryLayout(t, nlayers, par)
 
     % Quick brute force optimization to find the closest to AR
     layercells = par.accu.ncells/nlayers;
@@ -6,9 +6,9 @@ function [nch, stack, dim] = batteryLayout(t, nlayers, AR, par)
     optErr = inf;
     for w = div(2:end-1)
         h = layercells/w;
-        if abs(h/w - AR) < optErr % Better candidate combination
+        if abs(h/w - par.accu.AR) < optErr % Better candidate combination
             wopt = w;
-            optErr = abs(h/w - AR); % set new error
+            optErr = abs(h/w - par.accu.AR); % set new error
         end
     end
     
