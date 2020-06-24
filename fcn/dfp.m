@@ -1,4 +1,4 @@
-function [xopt] = dfp(fcn, x1, H0)
+function [xopt] = dfp(fcn, x0, H0)
 
     % Initial guess for B
     B1 = inv(H0);
@@ -19,21 +19,24 @@ function [xopt] = dfp(fcn, x1, H0)
     while ~converged && (i <= 1e4)
         
         s1 = -B1*g1;
-        a1 = lineSearch(@(a) fcn(x1 + a1*s1), [0 10]);
+        a1 = lineSearch(@(a1) fcn(x1 + a1*s1), [0 10]);
+        
         x2 = x1 + a1*s1;
-        
         g2 = findif(fcn, x2);
-        y = g2 - g1;
         
-        B1 = B1 + (s'*y + y'*B1*y)/(s'*y)^2 - (B1*y*s' + s*y'*B1)/(s'*y);
+        dg = g2 - g1;
+        dx = a1*s1;
+        dB1 = (dx*dx')/(dx'*dg) - ((B1*dg)*(B1*dg)')/(dg'*(B1*dg));
+        B2 = B1 + dB1;
         
-        if norm(x1 - x1) < eps
+        if norm(x2 - x1) < eps
             converged = true;
         end
         
-        x1 = x1; i = i + 1;
+        x1 = x2; 
+        i = i + 1;
     end
        
-    xopt = x1;
+    xopt = x2;
 
 end
