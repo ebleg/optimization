@@ -24,12 +24,14 @@ xlabel('Design variable x1'), ylabel('df/dx1'), title('Sensitivities objective f
 subplot(212)
 plot(x2,sensx2')
 xlabel('Design variable x2'), ylabel('df/dx2'), title('Sensitivities objective function')
- 
-% figure(3);
-% subplot(211)
-% semilogx(hx,ldfdx1')
-% xlabel('Difference step hx')
-% 
-% subplot(212)
-% semilogx(hx,ldfdx2')
-% xlabel('Difference step hx')
+
+% Logarithmic sensitivity, used to compare the influence of the design
+% variables
+[x1, x2, logx1, logx2] = sensitivityanalysis3(fun,xopt);
+figure(3);
+subplot(211)
+plot(x1,logx1')
+xlabel('Design variable x1'), ylabel('(x1/f(x1,x2)*df/dx1'), title('Logarithmic sensitivities objective function')
+subplot(212)
+plot(x2,logx2')
+xlabel('Design variable x2'), ylabel('(x1/f(x1,x2)*df/dx1'), title('Logarithmic sensitivities objective function')
