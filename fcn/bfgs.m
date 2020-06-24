@@ -8,7 +8,7 @@ function [xopt] = bfgs(fcn, x0, H0)
     
     I = eye(size(x0, 2));
     
-    g0 = jacobianest(fcn, x0)';
+    g0 = findif(fcn, x0);
     
     % Convergence criterion
     eps = 1e-5;
@@ -19,29 +19,31 @@ function [xopt] = bfgs(fcn, x0, H0)
     oldphi = fcn(x0) + 0.5*norm(g0);
     
     % Obtain search direction
-    while ~converged && (i <= 50)
+    while ~converged && (i <= 200)
         p = -B*(g0);
 
         [a, oldphi] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, oldphi);
-        s = a*p;
-        x1 = x0 + s;
-        g1 = jacobianest(fcn, x1)';
+        x1 = x0 + a*p;
+        g1 = findif(fcn, x1);
 
         scatter(x1(1), x1(2));
         
+        s = x1 - x0;
         y = g1 - g0;
         
-        rho = 1/(y'*s);
-        B = (I - rho*(s*y'))*B*(I - rho*(y*s')) + rho*(s*s');
-%         B = inv(hessian(fcn, x1));
-        
+%         rho = 1/(y'*s);
+%         B = (I - rho*(s*y'))*B*(I - rho*(y*s')) + rho*(s*s');
+
+        B = B + ((s'*y + y'*B*y)*(s*s'))/(s'*y)^2 - (B*y*s' + s*y'*B)/(s'*y);
+                
         if norm(g1) < eps
             converged = true;
         end
         
-        x0 = x1; i = i + 1; g0 = g1;
+        x0 = x1;
+        g0 = g1;
+        i = i + 1; 
     end
-    disp(i)
     xopt = x1;
 end
 

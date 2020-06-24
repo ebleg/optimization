@@ -11,15 +11,14 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, oldphi)
     phi0 = meta.phi_at0;
     dphi0 = meta.dphi_at0;      
     
-    a1 = min(1, 1.01*2*(phi0 - oldphi)/dphi0);
-
+    a1 = 1;
+    
     dphi1 = meta.phi_deriv(a1);
     phi1 = meta.phi(a1);
 
     max_iter = 10;
     
     for i = 1:max_iter
-        
         % First condition
         if (phi1 > (meta.phi_at0 + meta.C1*a1*meta.dphi_at0)) || ...
                 ((phi1 >= phi0) && i > 1)
@@ -41,6 +40,7 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, oldphi)
         
         a0 = a1;
         a1 = min(a1*2, amax); % From Python implementation
+
         phi0 = phi1;
         dphi0 = dphi1;
         phi1 = meta.phi(a1);
@@ -55,7 +55,7 @@ function [astar, phi_astar] = lineSearch2(fnc, amax, oldphi)
 end
 
 function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, dphihigh)
-    max_iter = 100;
+    max_iter = 10;
     for j = 1:max_iter
         anew = cubicintp(alow, philow, dphilow, ahigh, phihigh, dphihigh);
         phinew = meta.phi(anew);
@@ -82,7 +82,6 @@ function [astar, phi_astar] = zoom(meta, alow, philow, dphilow, ahigh, phihigh, 
         end
         
         if j == max_iter
-%             warning('Zoom did not converge');
             astar = 1;
             phi_astar = 0;
         end

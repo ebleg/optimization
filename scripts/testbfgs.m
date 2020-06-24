@@ -4,8 +4,9 @@ axis equal;
 
 f = @(x) (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
 % f = @(x) (x(1)).^2 + (x(2)).^2 ;
+% f = @(x) (x(1)^2 + x(2) - 11)^2 + (x(1) + x(2)^2 - 7)^2;
 
-[X, Y] = meshgrid(-3:0.1:3, -3:0.1:3);
+[X, Y] = meshgrid(-5:0.1:5, -5:0.1:5);
 Z = nan(size(X));
 
 for i = 1:numel(X)
@@ -17,7 +18,7 @@ grid; grid minor;
 
 x0 = [-2.1 2.7];
 H0 = hessian(f, x0);
-xopt = bfgs(f, x0, H0);
+xopt = bfgs(f, x0, eye(2));
 
 % scatter(xopt(1), xopt(2), 'filled');
 
