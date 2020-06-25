@@ -1,31 +1,23 @@
-clear; close all;
-figure; hold on;
-axis equal;
-
-f = @(x) (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
-% f = @(x) (x(1)).^2 + (x(2)).^2 ;
-% f = @(x) (x(1)^2 + x(2) - 11)^2 + (x(1) + x(2)^2 - 7)^2;
+clear; close all; clc;
 
 [X, Y] = meshgrid(-5:0.1:5, -5:0.1:5);
 Z = nan(size(X));
 
-for i = 1:numel(X)
-    Z(i) = f([X(i), Y(i)]);
-end
+% for i = 1:numel(X)
+%     Z(i) = f([X(i), Y(i)]);
+% end
 
-contour(X, Y, Z, linspace(0, 1000, 30));
-grid; grid minor;
+% contour(X, Y, Z, linspace(0, 1000, 30));
 
 x0 = [-2.1 2.7];
-H0 = hessian(f, x0);
-xopt = bfgs(f, x0, eye(2));
+xopt = bfgs(@rosen, x0);
 
 % scatter(xopt(1), xopt(2), 'filled');
 
-options = optimoptions(@fminunc,'Display','iter','Algorithm','quasi-newton',...
-    'HessUpdate','bfgs','MaxFunctionEvaluations',10000,...
-    'MaxIterations',10000, 'OutputFcn', @outfun);
-
+% options = optimoptions(@fminunc,'Display','iter','Algorithm','quasi-newton',...
+%     'HessUpdate','bfgs','MaxFunctionEvaluations',10000,...
+%     'MaxIterations',10000, 'OutputFcn', @outfun);
+% 
 % [x,fval,exitflag,output] = fminunc(f,x0,options);
 
 function stop = outfun(x, optimValues, state)
@@ -39,3 +31,7 @@ function stop = outfun(x, optimValues, state)
     x0 = x;
     drawnow
 end 
+
+function y = rosen(x)
+    y = (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
+end

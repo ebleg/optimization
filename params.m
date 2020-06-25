@@ -12,6 +12,7 @@ par.channel.Nu = 3.6;           % Square
 
 %% Battery package
 par.accu.ncells = 120;
+par.accu.AR = 1;
 
 %% Air properties at 310 K, 101325 Pa
 par.air.rho = 1.177;            % Density
