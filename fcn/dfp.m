@@ -1,42 +1,50 @@
 function [xopt] = dfp(fcn, x0, H0)
 
-    % Initial guess for B
-    B1 = inv(H0);
+ % Initial guess for B
+    B = inv(H0);
     
-    % Make sure x0 is column vector
     if size(x0, 2) ~= 1
-        x1 = x0';
+        x0 = x0';
     end
     
-    % gradient step 1
-    g1 = findif(fcn, x1);
+    I = eye(size(x0, 2));
+    
+    g0 = findif(fcn, x0);
     
     % Convergence criterion
-    eps = 1e-3;
+    eps = 1e-5;
     i = 0; converged = false;
     
+    scatter(x0(1), x0(2));
+    
+    oldphi = fcn(x0) + 0.5*norm(g0);
+    
     % Obtain search direction
-    while ~converged && (i <= 1e4)
+    while ~converged && (i <= 200)
+        p = -B*(g0);
+
+        [a, oldphi] = lineSearch2(@(alph) fcn(x0 + alph*p), 1e100, oldphi);
+        x1 = x0 + a*p;
+        g1 = findif(fcn, x1);
+
+        scatter(x1(1), x1(2));
         
-        s1 = -B1*g1;
-        a1 = lineSearch(@(a1) fcn(x1 + a1*s1), [0 10]);
+        dx = x1 - x0;
+        dg = g1 - g0;
         
-        x2 = x1 + a1*s1;
-        g2 = findif(fcn, x2);
-        
-        dg = g2 - g1;
-        dx = a1*s1;
-        dB1 = (dx*dx')/(dx'*dg) - ((B1*dg)*(B1*dg)')/(dg'*(B1*dg));
-        B2 = B1 + dB1;
-        
-        if norm(x2 - x1) < eps
+%         rho = 1/(y'*s);
+%         B = (I - rho*(s*y'))*B*(I - rho*(y*s')) + rho*(s*s');
+
+        B = B + (dx*dx')/(dx'*dg) - ((B*dg)*(B*dg)')/(dg'*(B*dg));
+                
+        if norm(g1) < eps
             converged = true;
         end
         
-        x1 = x2; 
-        i = i + 1;
+        x0 = x1;
+        g0 = g1;
+        i = i + 1; 
     end
-       
-    xopt = x2;
+    xopt = x1;       
 
 end
