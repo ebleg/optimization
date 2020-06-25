@@ -1,4 +1,4 @@
-function [] = plotCellTemperatures(t, nlayers, AR, Tcells, par)
+function [] = plotCellTemperatures(t, nlayers, Tcells, par)
     % Cell coordinates
     [x1,y1,z1] = cylinder(par.cell.r);
     x1 = x1(:) + par.cell.r; 
@@ -15,7 +15,7 @@ function [] = plotCellTemperatures(t, nlayers, AR, Tcells, par)
     dz = par.cell.l;
     
     % Compute layout
-    [~, stack, size] = batteryLayout(t, nlayers, AR, par);
+    [~, stack, size] = batteryLayout(t, nlayers, par);
     
     % Colormap values
     cmap = colormap;

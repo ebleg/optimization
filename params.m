@@ -6,12 +6,13 @@ par.cell.r = 9.2e-3;            % Cell radius [m]
 par.cell.l = 65e-3;             % Cell length [m]
 par.cell.T0 = 46 + 273.15;       % Cell temperature [K]
 par.cell.qin = 0.1;
+par.cell.Tmax = 318.15;
 
 %% Channel
 par.channel.Nu = 3.6;           % Square
 
 %% Battery package
-par.accu.ncells = 120;
+par.accu.ncells = 420;
 par.accu.AR = 1;
 
 %% Air properties at 310 K, 101325 Pa
@@ -42,6 +43,9 @@ par.cond.k_vert = 0.1;
 par.cond.k_hor = 0.1;
 
 %% Size constraints
-par.constraints.xwidth = 0.5;
-par.constraints.ywidth = 0.3;
-par.constraints.z = 0.4;
+par.cost.xwidth = 0.2;
+par.cost.ywidth = 0.2;
+par.cost.z = 0.4;
+par.cost.P_nominal = 1.56;
+par.cost.P_max = 2*par.cost.P_nominal;
+par.cost.r_boundary = 10;

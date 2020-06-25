@@ -20,7 +20,7 @@ xlabel('Difference step hx'), ylabel('df/dx2'), title('Sensitivities objective f
 figure(2);
 subplot(211)
 plot(x1,sensx1')
-xlabel('Design variable x1'), ylabel('df/dx1'), title('Sensitivities objective function')
+xlabel('Design variable $x_{1}$'), ylabel('df/dx1'), title('Sensitivities objective function')
 subplot(212)
 plot(x2,sensx2')
 xlabel('Design variable x2'), ylabel('df/dx2'), title('Sensitivities objective function')
@@ -31,7 +31,7 @@ xlabel('Design variable x2'), ylabel('df/dx2'), title('Sensitivities objective f
 figure(3);
 subplot(211)
 plot(x1,logx1')
-xlabel('Design variable x1'), ylabel('(x1/f(x1,x2)*df/dx1'), title('Logarithmic sensitivities objective function')
+xlabel('Design variable $x_{1}$'), ylabel('(x1/f(x1,x2)*df/dx1'), title('Logarithmic sensitivities objective function')
 subplot(212)
 plot(x2,logx2')
 xlabel('Design variable x2'), ylabel('(x1/f(x1,x2)*df/dx1'), title('Logarithmic sensitivities objective function')
