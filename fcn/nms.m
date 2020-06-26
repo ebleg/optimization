@@ -44,16 +44,13 @@ previous = scores(dim+1);
 % Possible vertex positions
 M = sum(x(:,1:dim)')'./dim;                     %   M = midpoint of all sides except for the worst 
 R = 2*M - x(:,dim+1);                           %   R = reflection point
-E = 2*R - M;                                    %   E = expansion point
-CW = (M-x(:,dim+1))/2 + x(:,dim+1);             %   CW = contraction point on side worst vertex
-CR = (R - M)/2 + M;                             %   CR = contraction point on side of reflection point R
-S = (x(:,1) - x(:,dim+1))/2 + x(:,dim+1);       %   S = midpoint of the line between the best and worst vertex
 
 % Update cycle
 if fcn(R) < fcn(x(:,dim)) && fcn(x(:,1)) <= fcn(R)                  
         x(:,dim+1) = R;
         display('Reflection 1)')
 elseif fcn(R) < fcn(x(:,1))
+    E = 2*R - M;                                    %   E = expansion point
     if fcn(E) < fcn(R)
             x(:,dim+1) = E;
             display('Expansion')
@@ -63,20 +60,24 @@ elseif fcn(R) < fcn(x(:,1))
     end
 else % fcn(x(:,dim)) <= fcn(R)                                    
     if fcn(R) < fcn(x(:,dim+1))
+       CR = (R - M)/2 + M;                             %   CR = contraction point on side of reflection point R
         if fcn(CR) < fcn(R)
             x(:,dim+1) = CR;
             display('Contraction outside')
         else % Shrink 
+            S = (x(:,1) - x(:,dim+1))/2 + x(:,dim+1);       %   S = midpoint of the line between the best and worst vertex
             x(:,dim+1) = S;      
             x(:,dim) = M;  
             display('Shrink (1)')
         end
     else % fcn(x(:,dim+1) <= fcn(R) 
+        CW = (M-x(:,dim+1))/2 + x(:,dim+1);             %   CW = contraction point on side worst vertex
         if fcn(CW) < fcn(R)     
             x(:,dim+1) = CW;
             display('Contraction inside')
         else
-            x(:,dim+1) = S;      
+            S = (x(:,1) - x(:,dim+1))/2 + x(:,dim+1);       %   S = midpoint of the line between the best and worst vertex
+            x(:,dim+1) = S;
             x(:,dim) = M;  
             display('Shrink (2)')
         end
