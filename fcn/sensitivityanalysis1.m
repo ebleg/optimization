@@ -16,6 +16,7 @@ for i=1:1:length(hx)
   dfdx2(i) = (fx2plus - fx1min)/(2*hx(i));
   
 end
+
 end
 
   
