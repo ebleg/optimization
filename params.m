@@ -26,10 +26,11 @@ par.air.Pr = .69;               % Prandtl number
 
 %% Fan
 % Based on fan used in NunaX: Noctua NF-A14 PWM, 140mm
-par.fan.u1 = 0.039;         % Volumetric flow [m3/s]
-par.fan.p1 = 1.56;          % Power [W]
-par.fan.omega1 = 1500;      % RPM
-par.fan.D1 = 0.14;          % Diameter fan [m]
+par.fan.D1 = 0.14;                      % Diameter fan [m]
+par.fan.omega1 = (1500/60)*2*pi;        % Hoeksnelheid [rad/s]
+par.fan.q1 = 140.2/3600;                % Volumetric flow [m3/s]
+par.fan.p1 = 1.56;                      % Power [W]
+
 
 %% Variable property correction exponents
 par.correction.lam.m = 1;
