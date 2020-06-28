@@ -1,6 +1,6 @@
 %% ENGINEERING OPTIMIZATION PROJECT
 
-close all; clear; clc;
+close all; clear all; clc;
 
 run params
 run defaultPlotSettings
@@ -11,7 +11,8 @@ nlayers = 5;
 t = 0.001;
 u = 0.5;
 
-[nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
+[nch, stack, dim] = batteryLayout(t, nlayers, par);
+% [nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
 
 
 
