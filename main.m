@@ -14,6 +14,7 @@ u = 0.5;
 [nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
 
 
+
 Tcells = ones(stack.x, stack.y, stack.z)*par.cell.T0;
 plotBattery(t, nlayers, AR, par);
 
