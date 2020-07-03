@@ -1,5 +1,4 @@
 function [total, cost] = combinedModel(omega, t, nlayers, par)
-% [total, cost, meta] = combinedModel(omega, t, nlayers, par)
 
 %     t = max(0, t);
 %     omega = max(0, omega);
