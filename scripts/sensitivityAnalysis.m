@@ -90,18 +90,32 @@ par.accu.ncells = 60;
 % xlabel('nlayers'); ylabel('cost');
 
 %% Central finite difference gradients of objective function for different perturbations
+% x0 = [0.005 50];
+% nlayers = 3;
+% costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
+% 
+% [hx, dfdx1, dfdx2] = sensitivityanalysis1(costhandle,x0);
+% figure(6);
+% subplot(211)
+% semilogx(hx,dfdx1')
+% xlabel('Difference step $hx$'), ylabel('$\frac{df}{dx_{1}}$'), title('Sensitivities objective function')
+% subplot(212)
+% semilogx(hx,dfdx2')
+% xlabel('Difference step $hx$'), ylabel('$\frac{df}{dx_{2}}$'), title('Sensitivities objective function')
+
+%% Central finite difference gradients of objective function for constant perturbation hx = 1e-8 and different values for the design variables.
 x0 = [0.005 50];
 nlayers = 3;
 costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 
-[hx, dfdx1, dfdx2] = sensitivityanalysis1(costhandle,x0);
-figure(1);
+[sensx1, sensx2] = sensitivityanalysis2(t,omega,costhandle,x0);
+figure(7);
 subplot(211)
-semilogx(hx,dfdx1')
-xlabel('Difference step $hx$'), ylabel('$\frac{df}{dx_{1}}$'), title('Sensitivities objective function')
+plot(t,sensx1')
+xlabel('t'), ylabel('$\frac{df}{dt}$'), title('Sensitivities objective function')
 subplot(212)
-semilogx(hx,dfdx2')
-xlabel('Difference step $hx$'), ylabel('$\frac{df}{dx_{2}}$'), title('Sensitivities objective function')
+plot(omega,sensx2')
+xlabel('Omega'), ylabel('$\frac{df}{$d \omega$'), title('Sensitivities objective function')
 
 
 
