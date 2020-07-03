@@ -115,7 +115,7 @@ plot(t,sensx1')
 xlabel('t'), ylabel('$\frac{df}{dt}$'), title('Sensitivities objective function')
 subplot(212)
 plot(omega,sensx2')
-xlabel('Omega'), ylabel('$\frac{df}{$d \omega$'), title('Sensitivities objective function')
+xlabel('Omega'), ylabel('$\frac{df}{domega}$'), title('Sensitivities objective function')
 
 
 
