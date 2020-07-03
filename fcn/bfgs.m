@@ -1,5 +1,4 @@
 function [xopt,count,plot] = bfgs(fcn, x0, Hessupdate)
-
 % Initial guess for B
     N = numel(x0);
     B = eye(N);

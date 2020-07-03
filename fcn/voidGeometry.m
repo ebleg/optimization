@@ -9,6 +9,5 @@ function [Dh, Ac, P] = voidGeometry(t, par)
 
     % Hydraulic diameter
     Dh = 4*Ac./P;
-
 end
 

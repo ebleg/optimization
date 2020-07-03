@@ -8,7 +8,8 @@ function [q, Tb] = laminarDuct(t, Ts, Te, L, u, par)
     
     %% Approximations
     % Square duct approximation (from Table 4.5 in Basic Heat and Mass Transfer) 
-    Nub = 3.6; 
+%     Nub = 3.6; 
+    Nub = 3.66 + 0.065*(Dh/L)*Re*par.air.Pr/(1 + 0.04*((Dh/L)*Re*par.air.Pr)^(2/3));
     fb = 57/Re;
     
     %% Variabel property correction

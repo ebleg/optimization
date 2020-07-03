@@ -49,4 +49,4 @@ par.cost.ywidth = 0.2;
 par.cost.z = 0.4;
 par.cost.P_nominal = 1.56;
 par.cost.P_max = 2*par.cost.P_nominal;
-par.cost.r_boundary = 100;
+par.cost.r_boundary = 1;

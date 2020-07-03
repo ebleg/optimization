@@ -1,7 +1,7 @@
 clear all; close all; clc;
 
-t = linspace(0, 10e-3, 10);
-omega = linspace(0, 300, 300);
+t = linspace(0, 20e-3, 10);
+omega = linspace(20, 150, 10);
 nlayers = 4;
 
 run params
@@ -13,8 +13,9 @@ par.accu.ncells = 60;
 cost = nan(size(trng));
 
 for i = 1:numel(trng)
-    cost(i) = combinedModel(omegarng(i), trng(i), nlayers, par);
+    [cost(i), partial] = combinedModel(omegarng(i), trng(i), nlayers, par);
 %     plotSensitivityAnalysis(fun,xopt);
+    bar(partial)
 end
 
 mesh(trng, omegarng, cost)
