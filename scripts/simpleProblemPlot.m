@@ -22,5 +22,6 @@ mesh(trng, omegarng, cost)
 xlabel('t [m]')
 ylabel('omega [rad/s]')
 
-
-% [cost] = combinedModel(omega, t, nlayers, par)
+[cost] = combinedModel(omega, t, nlayers, par)
+x0 = [0.012 120];
+[xopt] = nms(cost,x0);

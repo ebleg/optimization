@@ -5,7 +5,6 @@ tic;
 dim = length(x0);                  % Number of design variables
 step = 1;                          % Steplength between other vertices of initial simplex and vertex x0
 x = zeros(dim, dim+1);             % Coordinates of each vertex of the simplex
-scores = zeros(1, dim+1);          % Score for each vertex of the simplex
 x(:,1) = x0;                       % Vertex 1 is equal to the initial guess
 for i = 1:dim
     x(:, i+1) = x0;                % Set the coordinates of all other vertices to x0 as well
