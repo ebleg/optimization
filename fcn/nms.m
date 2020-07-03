@@ -11,7 +11,7 @@ for i = 1:dim
     x(i, i+1) = x(i,i+1) + step;   % The coordinates of all other vertices become 1 step away from x0
 end
 
-maxiteration = 10000;
+maxiteration = 1000;
 iteration = 0;
 previous = 10000;
 
@@ -26,10 +26,9 @@ end
 % Sort scores corresponding coordinates of simplex vertices from best to worst
 [scores,idx] = sort(scores);
 x = x(:, idx);
-scores;
 
 % Termination condition
-maxerror = 0.0001;              % Same as fminsearch
+maxerror = 0.000001;              % Same as fminsearch
 if iteration > 0
     error = abs(scores(dim+1) - previous);
     if error < maxerror

@@ -14,14 +14,12 @@ cost = nan(size(trng));
 
 for i = 1:numel(trng)
     [cost(i), partial] = combinedModel(omegarng(i), trng(i), nlayers, par);
-%     plotSensitivityAnalysis(fun,xopt);
-    bar(partial)
 end
 
 mesh(trng, omegarng, cost)
 xlabel('t [m]')
 ylabel('omega [rad/s]')
 
-[cost] = combinedModel(omega, t, nlayers, par)
-x0 = [0.012 120];
-[xopt] = nms(cost,x0);
+x0 = [0.005 50];
+costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
+[xopt] = nms(@costhandle,x0);
