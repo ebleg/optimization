@@ -99,7 +99,6 @@ function [astar, phi_astar, dphi_astar] = zoom(meta, alow, philow, dphilow, ahig
             astar = 1;
             phi_astar = meta.phi(astar);  % Inefficient, but almost never happens
             dphi_astar = meta.phi_deriv(astar, phi_astar);
-%             warning('Maximum iterations reached')
         end
     end
 end

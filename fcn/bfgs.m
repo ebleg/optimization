@@ -1,4 +1,4 @@
-function [xopt,count,plot] = bfgs(fcn, x0, Hessupdate)
+function [xopt,count] = bfgs(fcn, x0, Hessupdate)
 % Initial guess for B
     N = numel(x0);
     B = eye(N);
@@ -11,9 +11,9 @@ function [xopt,count,plot] = bfgs(fcn, x0, Hessupdate)
     g0 = findif(fcn, x0, f0);
     
     % Convergence criterion
-    eps = 1e-5;
+    eps = 1e-8;
     count = 0; converged = false;
-        
+
     % Obtain search direction
     while ~converged && (count <= 200)
         p = -B*(g0);
@@ -29,12 +29,12 @@ function [xopt,count,plot] = bfgs(fcn, x0, Hessupdate)
         y = g1 - g0;
         
         if Hessupdate            % Hessian update bfgs
-        B = B + ((s'*y + y'*B*y)*(s*s'))/(s'*y)^2 - (B*y*s' + s*y'*B)/(s'*y);
+            B = B + ((s'*y + y'*B*y)*(s*s'))/(s'*y)^2 - (B*y*s' + s*y'*B)/(s'*y);
         else                    % Hessian update dfp
-        B = B + (s*s')/(s'*y) - ((B*y)*(B*y)')/(y'*(B*y));
+            B = B + (s*s')/(s'*y) - ((B*y)*(B*y)')/(y'*(B*y));
         end
-                
-        if norm(g1) < eps
+        
+        if (norm(g1) < eps) || (norm(s) < 1e-10)
             converged = true;
         end
         
@@ -42,14 +42,6 @@ function [xopt,count,plot] = bfgs(fcn, x0, Hessupdate)
         f0 = f1;
         g0 = g1;
         count = count + 1;
-        plot(:,count) = x1;
-        a = 2;
-    
-    end
-    
+    end    
     xopt = x1;
-    count;
-    plot;
-    
 end
-
