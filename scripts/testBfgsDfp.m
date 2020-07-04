@@ -8,10 +8,9 @@ Z = nan(size(X));
 % end
 % 
 % contour(X, Y, Z, linspace(0, 1000, 30)); hold on;
-% % 
+
 x0 = [2.4 -2.4];
-Hessupdate = true;      % true = bfgs, false = dfp 
-[xopt,count,plot] = bfgs(@rosen, x0, Hessupdate);
+[xopt,count] = bfgs(@rosen, x0, true);
 
 %% Check
 % fun = @(x) 100*(x(2) - x(1)^2)^2 + (1 - x(1))^2;
@@ -51,10 +50,5 @@ function stop = outfun(x, optimValues, state)
 end 
 
 function y = rosen(x)
-    persistent count
-    if isempty(count)
-        count = 0;
-    end
     y = (1 - x(1)).^2 + 100*(x(2) - x(1).^2).^2 ;
-    count = count + 1
 end
