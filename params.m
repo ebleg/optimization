@@ -8,16 +8,14 @@ par.cell.T0 = 46 + 273.15;       % Cell temperature [K]
 par.cell.qin = 0.1;
 par.cell.Tmax = 318.15;
 
-%% Channel
-par.channel.Nu = 3.6;           % Square
-
 %% Battery package
 par.accu.ncells = 420;
 par.accu.AR = 1;
 
 %% Air properties at 310 K, 101325 Pa
 par.air.rho = 1.177;            % Density
-par.air.T = 300;                % Temperature
+% par.air.T = 300;                % Temperature
+par.air.T = 273.15 + 35;                % Temperature
 par.air.k = 0.0267;             % Thermal conductivity
 par.air.cp = 1005;              % Specific heat @ constant pressure
 par.air.mu = 18.43e-6;          % Dynamic viscosity
@@ -30,7 +28,6 @@ par.fan.D1 = 0.14;                      % Diameter fan [m]
 par.fan.omega1 = (1500/60)*2*pi;        % Hoeksnelheid [rad/s]
 par.fan.q1 = 140.2/3600;                % Volumetric flow [m3/s]
 par.fan.p1 = 1.56;                      % Power [W]
-
 
 %% Variable property correction exponents
 par.correction.lam.m = 1;
@@ -49,4 +46,4 @@ par.cost.ywidth = 0.2;
 par.cost.z = 0.4;
 par.cost.P_nominal = 1.56;
 par.cost.P_max = 2*par.cost.P_nominal;
-par.cost.r_boundary = 1;
+par.cost.r_boundary = 6;

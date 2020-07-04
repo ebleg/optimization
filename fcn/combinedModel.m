@@ -1,4 +1,4 @@
-function [total, cost] = combinedModel(omega, t, nlayers, par)
+function [total, partial] = combinedModel(omega, t, nlayers, par)
 
 %     t = max(0, t);
 %     omega = max(0, omega);
@@ -36,18 +36,14 @@ function [total, cost] = combinedModel(omega, t, nlayers, par)
     end
     
     Tmax = smoothmax(Tcells(:), 1);
-    Tavg = mean(Tcells(:));
     
-    normalize = @(x) x/norm(x);
-    weights = normalize([1 1 1 1 20 1]);
+    weights = [1 1 1 1];
+    partial = [Pin, ...
+               (Tmax - par.air.T)/(par.cell.Tmax - Tmax), ...
+               boundaryFcn(dim.x, par.cost.xwidth, par.cost.r_boundary), ...
+               boundaryFcn(dim.y, par.cost.ywidth, par.cost.r_boundary)];
     
-    cost = normalize(weights.*[boundaryFcn(dim.x, 0, par.cost.xwidth, par.cost.r_boundary), ...
-                     boundaryFcn(dim.y, 0, par.cost.ywidth, par.cost.r_boundary), ...
-                     boundaryFcn(dim.z, 0, par.cost.z, par.cost.r_boundary), ...
-                     boundaryFcn(Tmax, 0, par.cell.Tmax, par.cost.r_boundary), ...
-                     Tavg/300, ...
-                     Pin/par.cost.P_nominal]);
-    total = sum(cost);
+    total = nansum(weights.*partial);
 
 end
 

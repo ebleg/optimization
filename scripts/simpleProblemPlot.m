@@ -1,8 +1,8 @@
 clear all; close all; clc;
 
-t = linspace(0, 20e-3, 10);
+t = linspace(0, 20e-3, 40);
 omega = linspace(20, 150, 10);
-nlayers = 4;
+nlayers = 2;
 
 run params
 run defaultPlotSettings
@@ -17,9 +17,10 @@ for i = 1:numel(trng)
 end
 
 mesh(trng, omegarng, cost)
-xlabel('t [m]')
-ylabel('omega [rad/s]')
 
-x0 = [0.005 50];
-costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
-[xopt] = nms(@costhandle,x0);
+
+% ylabel('omega [rad/s]')
+
+% x0 = [0.005 50];
+% costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
+% [xopt] = nms(@costhandle,x0);
