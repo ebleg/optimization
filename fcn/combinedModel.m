@@ -37,11 +37,12 @@ function [total, partial] = combinedModel(omega, t, nlayers, par)
     
     Tmax = smoothmax(Tcells(:), 1);
     
-    weights = [1 1 1 1];
+    weights = [1 1 1 1 1];
     partial = [Pin, ...
                (Tmax - par.air.T)/(par.cell.Tmax - Tmax), ...
                boundaryFcn(dim.x, par.cost.xwidth, par.cost.r_boundary), ...
-               boundaryFcn(dim.y, par.cost.ywidth, par.cost.r_boundary)];
+               boundaryFcn(dim.y, par.cost.ywidth, par.cost.r_boundary), ...
+               boundaryFcn(-t, 0, 500)];
     
     total = nansum(weights.*partial);
 
