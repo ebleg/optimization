@@ -1,6 +1,6 @@
 %% ENGINEERING OPTIMIZATION PROJECT
-
-close all; clear all; clc;
+clear all; clc;
+% close all;
 
 run params
 run defaultPlotSettings
@@ -12,40 +12,71 @@ run defaultPlotSettings
 %% Main optimization
 % Choose optimization method
 % 1 = NMS, 2 = BFGS, 3 = DFP, 4 = fminunc, 5 = fminsearch
-routine = 1;
+routine = 4;
 
-x0 = [150, 10e-3*1e4];
+x0 = [150, 5];
 
-for nlayers = 6:6
-    
-    % x = [omega, t]
-    obj = @(x) combinedModel(x(1), x(2)/1e4, nlayers, par);
-    
-    % Check number of layers
-    isdivisor = mod(par.accu.ncells, nlayers) == 0;
+nlayers = 10;
+
+% x = [omega, t]
+obj = @(x) combinedModel(x(1), x(2)/1e4, nlayers, par);
+
+% Check number of layers
+isdivisor = mod(par.accu.ncells, nlayers) == 0;
+
+global fcncounts
+fcncounts = 0;
+
+tic 
+
+if ~isdivisor
+   warning('Invalid number of layers');
+else
     [~, stack, mindim] = batteryLayout(0, nlayers, par);
     dimCheck = (mindim.x <= par.cost.xwidth) && ...
-               (mindim.y <= par.cost.ywidth) && ...
-               (mindim.z <= par.cost.z);
-    t_max = min((par.cost.xwidth - mindim.x)/(stack.x - 1), ...
-                (par.cost.ywidth - mindim.y)/(stack.y - 1));
-    
-    fprintf('Max t %f', t_max);
-    
-    if ~(isdivisor && dimCheck)
-       warning('Invalid number of layers');
+        (mindim.y <= par.cost.ywidth) && ...
+        (mindim.z <= par.cost.z);
+
+    if ~dimCheck
+        warning('Invalid number of layers');
     else
+        nlayers
         switch routine
             case 1
                 x = nms(obj, x0);
             case 2
-                x = bfgs(obj, x0, true);
+                [xopt, iterations, ~, fval] = bfgs(obj, x0, true);
             case 3
-                x = bfgs(obj, x0, false);
+                [x, count] = bfgs(obj, x0, false);
             case 4
-                x = fminunc(obj, x0);
+                options = optimoptions(@fminunc,'Algorithm', 'quasi-newton', ...
+                    'HessUpdate','bfgs','MaxFunctionEvaluations',10000, ...
+                    'Display', 'iter');
+                [xopt] = fminunc(obj, x0, options);
             otherwise
                 error('Invalid routine');
         end
     end
 end
+fcncounts = 0;
+
+toc
+
+%%
+for i = 2:size(xtraj, 2)
+   hold on;
+   line([xtraj(1,i-1) xtraj(1,i)],[xtraj(2,i-1) xtraj(2,i)], 'Color', '#3498db', 'Linewidth', 2, ...
+       'Marker', '*', 'MarkerSize', 5, 'HandleVisibility','off')
+end
+
+function stop = outfun(x, optimValues, state)
+    persistent x0
+    if isempty(x0)
+        x0 = [150, 10e-3*1e4];
+    end
+    
+    stop = false;
+    line([x0(1) x(1)],[x0(2) x(2)], 'Color', '#D95319', 'Linewidth', 2, 'Marker', '*', 'MarkerSize', 5, 'HandleVisibility','off')
+    x0 = x;
+    drawnow
+end 

@@ -25,6 +25,10 @@ function [astar, phi_astar, dphi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_a
     end
     
     phi1 = meta.phi(a1);
+    while phi1 == inf
+        a1 = 0.5*a1;
+        phi1 = meta.phi(a1);
+    end
     dphi1 = meta.phi_deriv(a1, phi1);
 
     max_iter = 10;
@@ -33,12 +37,14 @@ function [astar, phi_astar, dphi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_a
         % First Wolfe condition
         if (phi1 > (meta.phi_at0 + meta.C1*a1*meta.dphi_at0)) || ...
                 ((phi1 >= phi0) && i > 1)
+            disp('First condition satisfied! Zoom...')
             [astar, phi_astar, dphi_astar] = zoom(meta, a0, phi0, dphi0, a1, phi1, dphi1); break;
         end
         
         % Second Wolfe condition
         if (abs(dphi1) <= -meta.C2*meta.dphi_at0)
-           astar = a1; 
+            disp('Second condition satisfied! Exit...')
+           astar = a1;
            phi_astar = phi1;
            dphi_astar = dphi1;
            break; 
@@ -46,23 +52,31 @@ function [astar, phi_astar, dphi_astar] = lineSearch2(fnc, amax, phi_at0, dphi_a
         
         % Third condition
         if (dphi1 >= 0)
+            disp('Third condition satisfied! Zoom...')
            [astar, phi_astar, dphi_astar] = zoom(meta, a1, phi1, dphi1, a0, phi0, dphi0);
            break;
         end
         
         a0 = a1;
-        a1 = min(a1*2, amax); % From Python implementation
-
         phi0 = phi1;
         dphi0 = dphi1;
-        phi1 = meta.phi(a1);
-        dphi1 = meta.phi_deriv(phi1, phi1);
-                
+        
+        a2 = min(a1*2, amax); % From Python implementation
+        phi2 = meta.phi(a2);
+        while phi2 == inf
+            a2 = a1 + (a2 - a1)*0.5;
+            phi2 = meta.phi(a2);
+        end
+        a1 = a2;
+        phi1 = phi2;
+        dphi1 = meta.phi_deriv(a1, phi1);       
     end
     
     if i == max_iter
-       warning('Line search did not converge');
-       astar = 1;
+%        warning('Line search did not converge');
+       astar = a1;
+       phi_astar = phi1;
+       dphi_astar = dphi1;
     end
 end
 
@@ -83,12 +97,14 @@ function [astar, phi_astar, dphi_astar] = zoom(meta, alow, philow, dphilow, ahig
                astar = anew;
                phi_astar = phinew;
                dphi_astar = dphinew;
+               disp('STOOOOP zoom')
                break;
             end
             if (dphinew*(ahigh - alow)) >= 0
                 ahigh = alow;
                 phihigh = philow;
                 dphihigh = dphilow;
+                disp('Switch ahigh and alow')
             end
             alow = anew;
             philow = phinew;
@@ -96,7 +112,7 @@ function [astar, phi_astar, dphi_astar] = zoom(meta, alow, philow, dphilow, ahig
         end
         
         if j == max_iter
-            astar = 1;
+            astar = ahigh;
             phi_astar = meta.phi(astar);  % Inefficient, but almost never happens
             dphi_astar = meta.phi_deriv(astar, phi_astar);
         end
@@ -107,6 +123,6 @@ function a = cubicintp(a0, phi0, dphi0, a1, phi1, dphi1)
 % Cubic interpolation
     d1 = dphi0 + dphi1 - 3*(phi0 - phi1)/(a0 - a1);
     d2 = sign(a1 - a0)*sqrt(d1^2 - dphi0*dphi1);
-    
+    disp('Cubic interpolation')
     a = a1 - (a1 - a0)*((dphi1 + d2 - d1)/(dphi1 - dphi0 + 2*d2));
 end
