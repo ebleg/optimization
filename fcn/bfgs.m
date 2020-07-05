@@ -11,7 +11,7 @@ function [xopt,count] = bfgs(fcn, x0, Hessupdate)
     g0 = findif(fcn, x0, f0);
     
     % Convergence criterion
-    eps = 1e-8;
+    eps = 1e-5;
     count = 0; converged = false;
 
     % Obtain search direction

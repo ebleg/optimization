@@ -14,8 +14,7 @@ par.accu.AR = 1;
 
 %% Air properties at 310 K, 101325 Pa
 par.air.rho = 1.177;            % Density
-% par.air.T = 300;                % Temperature
-par.air.T = 273.15 + 35;                % Temperature
+par.air.T = 305;                % Temperature
 par.air.k = 0.0267;             % Thermal conductivity
 par.air.cp = 1005;              % Specific heat @ constant pressure
 par.air.mu = 18.43e-6;          % Dynamic viscosity
@@ -41,9 +40,9 @@ par.cond.k_vert = 0.1;
 par.cond.k_hor = 0.1;
 
 %% Size constraints
-par.cost.xwidth = 0.2;
-par.cost.ywidth = 0.2;
-par.cost.z = 0.4;
+par.cost.xwidth = 0.3;
+par.cost.ywidth = 0.3;
+par.cost.z = 2;
 par.cost.P_nominal = 1.56;
 par.cost.P_max = 2*par.cost.P_nominal;
 par.cost.r_boundary = 6;

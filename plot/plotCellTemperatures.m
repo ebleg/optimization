@@ -42,21 +42,24 @@ function [] = plotCellTemperatures(t, nlayers, Tcells, par)
     zlabel('$z$ [m]');
     
     str = sprintf('Dimensions [mm]\n  $x$: %.0f\n  $y$: %.0f\n  $z$: %.0f', size.x*1e3, size.y*1e3, size.z*1e3);
-    dim = [.4 .5 .3 .3];
-    annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'latex');
+    textboxdim = [.4 .5 .3 .3];
+    annotation('textbox',textboxdim,'String',str,'FitBoxToText','on', 'Interpreter', 'latex');
     
+    xlim([0, size.x]);
+    ylim([0, size.y]);
+    zlim([0, size.z]);
     axis equal;
     cb = colorbar('west', 'Ticks', linspace(0, 1, 10), 'TickLabels', round(linspace(0, 1, 10)*(Tmax - Tmin) + Tmin));    
     cb.TickLabelInterpreter = 'latex';
+    title('Configuration view', 'FontSize', 16)
+
     view(45, 45);
     
     nexttile;
     histogram(Tcells);
     xlabel('Temperature [K]');
     ylabel('Number of cells [-]');
-    
-    title(tl, '\textbf{Cell temperature}', 'Interpreter', 'latex');
-
+    title('Temperature distribution', 'FontSize', 16)
 
 end
 

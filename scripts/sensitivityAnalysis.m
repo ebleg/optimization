@@ -115,13 +115,13 @@ costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 [ht, homega, dfdt, dfdw] = sensitivityanalysis1(costhandle,x0);
 
 figure(6);
-% subplot(211)
+subplot(121)
 semilogx(ht,dfdt')
 xlabel('$h_{t}$'); ylabel('$\frac{df}{dt}$ [-]');
-ylim([-1 3]);
-% subplot(212)
-% semilogx(homega,dfdw')
-% xlabel('$h_{\omega}$'); ylabel('$\frac{df}{d\omega}$ [-]');
+% ylim([-1 3]);
+subplot(122)
+semilogx(homega,dfdw')
+xlabel('$h_{\omega}$'); ylabel('$\frac{df}{d\omega}$ [-]');
 
 %% 7 - Central finite difference gradients of objective function for constant perturbation hx = 1e-8 and different values for the design variables.
 t0 = 0.008;
@@ -138,10 +138,10 @@ costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 [sensx1, sensx2] = sensitivityanalysis2(t,omega,costhandle,x0,ht,homega);
 
 figure(7);
-subplot(211)
+subplot(121)
 plot(t,sensx1')
 xlabel('$t$ [m]'); ylabel('$\frac{df}{dt}$ [-]')
-subplot(212)
+subplot(122)
 plot(omega,sensx2')
 xlim([20 150]);
 xlabel('$\omega$ [rad/s]'); ylabel('$\frac{df}{d\omega}$ [-]');
