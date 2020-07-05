@@ -63,11 +63,11 @@ fcncounts = 0;
 toc
 
 %%
-for i = 2:size(xtraj, 2)
-   hold on;
-   line([xtraj(1,i-1) xtraj(1,i)],[xtraj(2,i-1) xtraj(2,i)], 'Color', '#3498db', 'Linewidth', 2, ...
-       'Marker', '*', 'MarkerSize', 5, 'HandleVisibility','off')
-end
+% for i = 2:size(xtraj, 2)
+%    hold on;
+%    line([xtraj(1,i-1) xtraj(1,i)],[xtraj(2,i-1) xtraj(2,i)], 'Color', '#3498db', 'Linewidth', 2, ...
+%        'Marker', '*', 'MarkerSize', 5, 'HandleVisibility','off')
+% end
 
 function stop = outfun(x, optimValues, state)
     persistent x0
