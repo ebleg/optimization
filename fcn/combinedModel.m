@@ -1,7 +1,7 @@
 function [total, partial] = combinedModel(omega, t, nlayers, par)
-
-%     t = max(0, t);
-%     omega = max(0, omega);
+    
+    fprintf('omega %f\n', omega);
+    fprintf('t %f\n', t);
 
     % Battery configuration
     [nch, stack, dim] = batteryLayout(t, nlayers, par);
@@ -44,7 +44,7 @@ function [total, partial] = combinedModel(omega, t, nlayers, par)
                boundaryFcn(dim.y, par.cost.ywidth, par.cost.r_boundary), ...
                boundaryFcn(-t, 0, 500)];
     
-    total = nansum(weights.*partial);
+    total = nansum(weights.*partial)
 
 end
 

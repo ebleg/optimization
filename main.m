@@ -5,41 +5,47 @@ close all; clear all; clc;
 run params
 run defaultPlotSettings
 
-AR = 1;
-nlayers = 5; 
+% if(isempty(gcp))
+%     parpool(4)
+% end
 
-t = 0.001;
-u = 0.5;
+%% Main optimization
+% Choose optimization method
+% 1 = NMS, 2 = BFGS, 3 = DFP, 4 = fminunc, 5 = fminsearch
+routine = 1;
 
-[nch, stack, dim] = batteryLayout(t, nlayers, par);
-% [nch, stack, dim] = batteryLayout(t, nlayers, AR, par);
+x0 = [150, 10e-3*1e4];
 
-
-
-Tcells = ones(stack.x, stack.y, stack.z)*par.cell.T0;
-plotBattery(t, nlayers, AR, par);
-
-channels = struct();
-channels.T = ones(stack.x-1, stack.y-1, stack.z)*par.air.T;  % outlet temperature
-channels.q = ones(stack.x-1, stack.y-1, stack.z);
-
-i = 0; converged = false;
-
-while ~converged && (i <= 1000)
-    channels = updateChannelTemp(t, u, channels, Tcells, par);
-    TcellsNew = updateCellTemp(Tcells, channels, stack, par);
+for nlayers = 6:6
     
-    if mean(abs(TcellsNew - Tcells)) < 1e-2
-        converged = true;
+    % x = [omega, t]
+    obj = @(x) combinedModel(x(1), x(2)/1e4, nlayers, par);
+    
+    % Check number of layers
+    isdivisor = mod(par.accu.ncells, nlayers) == 0;
+    [~, stack, mindim] = batteryLayout(0, nlayers, par);
+    dimCheck = (mindim.x <= par.cost.xwidth) && ...
+               (mindim.y <= par.cost.ywidth) && ...
+               (mindim.z <= par.cost.z);
+    t_max = min((par.cost.xwidth - mindim.x)/(stack.x - 1), ...
+                (par.cost.ywidth - mindim.y)/(stack.y - 1));
+    
+    fprintf('Max t %f', t_max);
+    
+    if ~(isdivisor && dimCheck)
+       warning('Invalid number of layers');
+    else
+        switch routine
+            case 1
+                x = nms(obj, x0);
+            case 2
+                x = bfgs(obj, x0, true);
+            case 3
+                x = bfgs(obj, x0, false);
+            case 4
+                x = fminunc(obj, x0);
+            otherwise
+                error('Invalid routine');
+        end
     end
-    
-    Tcells = TcellsNew;
-    
-    i = i + 1;
 end
-
-%%
-plotCellTemperatures(t, nlayers, AR, Tcells, par);
-
-
-
