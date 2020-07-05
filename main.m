@@ -20,7 +20,7 @@ for nlayers = 6:6
     
     % x = [omega, t]
     obj = @(x) combinedModel(x(1), x(2)/1e4, nlayers, par);
-    
+
     % Check number of layers
     isdivisor = mod(par.accu.ncells, nlayers) == 0;
     [~, stack, mindim] = batteryLayout(0, nlayers, par);
@@ -44,6 +44,9 @@ for nlayers = 6:6
                 x = bfgs(obj, x0, false);
             case 4
                 x = fminunc(obj, x0);
+            case 5
+                x = fminsearch(obj, x0);
+                x = [x(1) x(2)*1e-4];
             otherwise
                 error('Invalid routine');
         end
