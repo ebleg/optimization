@@ -70,7 +70,7 @@ end
 
 figure(3);
 plot(omega, cost);
-xlim([20 150]);
+% xlim([20 150]);
 xlabel('$\omega$ [rad/s]'); ylabel('Cost [-]');
 
 %% 4 - Influence of t on cost function (costant nlayers & omega)
@@ -115,13 +115,13 @@ costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 [ht, homega, dfdt, dfdw] = sensitivityanalysis1(costhandle,x0);
 
 figure(6);
-% subplot(211)
+subplot(211)
 semilogx(ht,dfdt')
 xlabel('$h_{t}$'); ylabel('$\frac{df}{dt}$ [-]');
-ylim([-1 3]);
-% subplot(212)
-% semilogx(homega,dfdw')
-% xlabel('$h_{\omega}$'); ylabel('$\frac{df}{d\omega}$ [-]');
+% ylim([-1 3]);
+subplot(212)
+semilogx(homega,dfdw')
+xlabel('$h_{\omega}$'); ylabel('$\frac{df}{d\omega}$ [-]');
 
 %% 7 - Central finite difference gradients of objective function for constant perturbation hx = 1e-8 and different values for the design variables.
 t0 = 0.008;
@@ -145,3 +145,105 @@ subplot(212)
 plot(omega,sensx2')
 xlim([20 150]);
 xlabel('$\omega$ [rad/s]'); ylabel('$\frac{df}{d\omega}$ [-]');
+
+%% 8 - Numerical Noise check
+
+t = 0.008;
+omega = linspace(20, 20.000001, 100);
+nlayers = 3;                       
+
+cost = nan(size(omega));
+
+for i = 1:length(omega)
+    [cost(i)] = combinedModel(omega(i), t, nlayers, par);
+end
+
+figure(3);
+subplot (2,3,1)
+plot(omega, cost);
+xlabel('$\omega$ [rad/s]'); ylabel('Cost [-]');
+xlim([20 20.000001]);
+
+% 2
+t = 0.008;
+omega = linspace(50, 50.000001, 100);
+nlayers = 3;                       
+
+cost = nan(size(omega));
+
+for i = 1:length(omega)
+    [cost(i)] = combinedModel(omega(i), t, nlayers, par);
+end
+
+figure(3);
+subplot (2,3,2)
+plot(omega, cost);
+xlabel('$\omega$ [rad/s]'); ylabel('Cost [-]');
+xlim([50 50.000001]);
+
+% 3
+t = 0.008;
+omega = linspace(80, 80.000001, 100);
+nlayers = 3;                       
+
+cost = nan(size(omega));
+
+for i = 1:length(omega)
+    [cost(i)] = combinedModel(omega(i), t, nlayers, par);
+end
+
+figure(3);
+subplot (2,3,3)
+plot(omega, cost);
+xlabel('$\omega$ [rad/s]'); ylabel('Cost [-]');
+xlim([80 80.000001]);
+
+% 4
+t = linspace(0.003, 0.003000001, 100);
+omega = 50;
+nlayers = 3;                       
+
+cost = nan(size(t));
+
+for i = 1:length(t)
+    [cost(i)] = combinedModel(omega, t(i), nlayers, par);
+end
+
+subplot(2,3,4);
+plot(t, cost);
+xlabel('$t$ [m]'); ylabel('Cost [-]');
+xlim([0.003 0.003000001]);
+
+% 5
+t = linspace(0.008, 0.008000001, 100);
+omega = 50;
+nlayers = 3;                       
+
+cost = nan(size(t));
+
+for i = 1:length(t)
+    [cost(i)] = combinedModel(omega, t(i), nlayers, par);
+end
+
+subplot(2,3,5);
+plot(t, cost);
+xlabel('$t$ [m]'); ylabel('Cost [-]');
+xlim([0.008 0.008000001]);
+
+% 6
+t = linspace(0.013, 0.013000001, 100);
+omega = 50;
+nlayers = 3;                       
+
+cost = nan(size(t));
+
+for i = 1:length(t)
+    [cost(i)] = combinedModel(omega, t(i), nlayers, par);
+end
+
+subplot(2,3,6);
+plot(t, cost);
+xlabel('$t$ [m]'); ylabel('Cost [-]');
+xlim([0.013 0.013000001]);
+
+
