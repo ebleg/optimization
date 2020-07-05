@@ -115,60 +115,33 @@ costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 [ht, homega, dfdt, dfdw] = sensitivityanalysis1(costhandle,x0);
 
 figure(6);
-subplot(211)
+% subplot(211)
 semilogx(ht,dfdt')
-xlabel('$h_{t}$'), ylabel('$\frac{df}{dt}$')
-subplot(212)
-semilogx(homega,dfdw')
-xlabel('$h_{\omega}$'), ylabel('$\frac{df}{d\omega}$')
+xlabel('$h_{t}$'); ylabel('$\frac{df}{dt}$ [-]');
+ylim([-1 3]);
+% subplot(212)
+% semilogx(homega,dfdw')
+% xlabel('$h_{\omega}$'); ylabel('$\frac{df}{d\omega}$ [-]');
 
-%% Central finite difference gradients of objective function for constant perturbation hx = 1e-8 and different values for the design variables.
+%% 7 - Central finite difference gradients of objective function for constant perturbation hx = 1e-8 and different values for the design variables.
 t0 = 0.008;
 omega0 = 50;
 nlayers = 3;                       
 t = linspace(0, 20e-3, 100);
 omega = linspace(20, 150, 100);
-hx = 1e-8;
-
-x0 = [t0 omega0];
-costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
-
-[sensx1, sensx2] = sensitivityanalysis2(t,omega,costhandle,x0,hx);
-
-figure(7);
-subplot(211)
-plot(t,sensx1')
-xlabel('t'), ylabel('$\frac{df}{dt}$'), title('Sensitivities objective function')
-subplot(212)
-plot(omega,sensx2')
-xlim([20 150]);
-xlabel('Omega'), ylabel('$\frac{df}{domega}$'), title('Sensitivities objective function')
-
-%% Central finite difference second order derivatives for constant perturbation hx = 1e-8 and different values for the design variables.
-%  Check for convexity
-
-t0 = 0.008;
-omega0 = 50;
-nlayers = 3;                       
-t = linspace(0, 20e-3, 10);
-omega = linspace(20, 150, 10);
 ht = 1e-8;
 homega = 1e-8;
 
 x0 = [t0 omega0];
 costhandle = @(x) combinedModel(x(2), x(1), nlayers, par);
 
-[dfdtdt, dfdtdw, dfdwdt, dfdwdw] = sensitivityanalysis4(t,omega,costhandle,x0,ht,homega);
+[sensx1, sensx2] = sensitivityanalysis2(t,omega,costhandle,x0,ht,homega);
 
-%%
-figure(8);
+figure(7);
 subplot(211)
-plot(t,dfdtdt')
-xlabel('t'), ylabel('$\frac{df}{dt}$'), title('Sensitivities objective function')
+plot(t,sensx1')
+xlabel('$t$ [m]'); ylabel('$\frac{df}{dt}$ [-]')
 subplot(212)
 plot(omega,sensx2')
 xlim([20 150]);
-xlabel('Omega'), ylabel('$\frac{df}{domega}$'), title('Sensitivities objective function')
-
-
-
+xlabel('$\omega$ [rad/s]'); ylabel('$\frac{df}{d\omega}$ [-]');
